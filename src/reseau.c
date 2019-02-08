@@ -5,10 +5,10 @@
 
 #define NBCERCLE 3
 #define NBEQUIP 5
-#define NBTOUR 10000
-
+#define NBTOUR 100000
 #define NBCAN 2
 #define NBSF 3
+
 /*structure qui contient les infos de chaque tour*/
 typedef struct {
 	int numSf;
@@ -33,7 +33,7 @@ void calc_best_can_sf(int* can,int* sf, Tgain gain, int count);
 
 int main() {
 	Tgain gainTour[NBEQUIP]; 
-	int nbPaquet=0, count=0, can, sf;
+	int nbPaquet=0, count=1, can, sf;
 	int position[NBEQUIP]; 
 	int choix[NBCAN][NBSF]; // Connaitre si une combinaison est choisi deux fois dans un tour
 	srand(time(NULL)); 
@@ -52,10 +52,8 @@ int main() {
 				gainTour[j].moyenne[k][l]=1;
 		}
 	}
-	
-	while(count<NBTOUR){
+	while(count<=NBTOUR){
 		init_tab(choix,0); 
-		//~ printf("Tour : %d\n", count);
 		/*A chque tour tous les equipements doivent envoyer un paquet*/
 		for(int j=0;j<NBEQUIP;j++) {
 			/*Calcul la meilleur combinaison */
@@ -81,7 +79,7 @@ int main() {
 		}
 		count++;
 	}
-	printf("nbPaquet: %d \n",nbPaquet);
+	printf("%d \n",nbPaquet);
 	return 0;
 }
 
