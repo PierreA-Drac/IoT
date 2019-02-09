@@ -4,8 +4,8 @@
 #include <math.h>
 
 #define NBCERCLE 3
-#define NBEQUIP 5
-#define NBTOUR 10000
+#define NBEQUIP 10
+#define NBTOUR 60000
 #define NBCAN 2
 #define NBSF 3
 
@@ -108,7 +108,7 @@ void init_moy(Tgain gainTour[NBEQUIP], int position[NBEQUIP]) {
 	for(int j=0;j<NBEQUIP;j++) {
 		for( int k=0;k<NBCAN;k++){
 			for(int l=0;l<NBSF;l++) {
-				if (j<position[j])
+				if (l<position[j])
 					gainTour[j].moyenne[k][l]=-1;
 				else
 					gainTour[j].moyenne[k][l]=1;
