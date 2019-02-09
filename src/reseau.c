@@ -5,7 +5,7 @@
 
 #define NBCERCLE 3
 #define NBEQUIP 5
-#define NBTOUR 100000
+#define NBTOUR 10000
 #define NBCAN 2
 #define NBSF 3
 
@@ -27,6 +27,7 @@ typedef struct
 
 
 void init_tab(int tab[NBCAN][NBSF], int val);
+void init_moy(Tgain gainTour[NBEQUIP], int pos[NBEQUIP]);
 float calc_moyenne(Tgain gainTour, int count);
 void calc_best_can_sf(int* can,int* sf, Tgain gain, int count);
 
@@ -41,17 +42,14 @@ int main() {
 	for(int i=0;i<NBEQUIP;i++) {
 		position[i]=rand()%NBCERCLE;
 	}
+	
 	init_tab(choix, 0);
 	/*On met que chaque combinaison a été utilisé une fois et que ca moyenne est de 1
 	 * pour être sûre quelles vont toutes être choisit au moins une fois.*/
 	for(int i=0;i<NBEQUIP;i++) 
 		init_tab(gainTour[i].fois, 1);
-	for(int j=0;j<NBEQUIP;j++) {
-		for( int k=0;k<NBCAN;k++){
-			for(int l=0;l<NBSF;l++) 
-				gainTour[j].moyenne[k][l]=1;
-		}
-	}
+	init_moy(gainTour,position);
+	
 	while(count<=NBTOUR){
 		init_tab(choix,0); 
 		/*A chque tour tous les equipements doivent envoyer un paquet*/
@@ -103,6 +101,19 @@ void init_tab(int tab[NBCAN][NBSF], int val) {
 	for( int i=0;i<NBCAN;i++){
 		for(int j=0;j<NBSF;j++)
 			tab[i][j]=val;
+	}
+}
+
+void init_moy(Tgain gainTour[NBEQUIP], int position[NBEQUIP]) {
+	for(int j=0;j<NBEQUIP;j++) {
+		for( int k=0;k<NBCAN;k++){
+			for(int l=0;l<NBSF;l++) {
+				if (j<position[j])
+					gainTour[j].moyenne[k][l]=-1;
+				else
+					gainTour[j].moyenne[k][l]=1;
+			}
+		}
 	}
 }
 
