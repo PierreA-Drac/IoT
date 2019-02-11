@@ -4,8 +4,8 @@
 #include <math.h>
 
 #define NBCERCLE 3
-#define NBEQUIP 10
-#define NBTOUR 60000
+#define NBEQUIP 9
+#define NBTOUR 20
 #define NBCAN 2
 #define NBSF 3
 
@@ -30,6 +30,7 @@ void init_tab(int tab[NBCAN][NBSF], int val);
 void init_moy(Tgain gainTour[NBEQUIP], int pos[NBEQUIP]);
 float calc_moyenne(Tgain gainTour, int count);
 void calc_best_can_sf(int* can,int* sf, Tgain gain, int count);
+void alea_can_sf(int *ptCan,int *ptSf, int j);
 
 
 int main() {
@@ -55,17 +56,19 @@ int main() {
 		/*A chque tour tous les equipements doivent envoyer un paquet*/
 		for(int j=0;j<NBEQUIP;j++) {
 			/*Calcul la meilleur combinaison */
-			calc_best_can_sf(&can,&sf, gainTour[j], count);
+			//~ alea_can_sf(&can,&sf,position[j]); 
+			calc_best_can_sf(&can,&sf,gainTour[j], count); //UCB1
 			/*Pas de collision on transmet paquet, on ajoute la valeur et
 			 * on "dit" que cette combinaison a déjà été choisie*/
 			if(choix[can][sf] == 0){
 				nbPaquet++;
-				gainTour[j].tour[count].valeur=0.9;
-				choix[can][sf]=1; 
+				if(sf==0)
+					gainTour[j].tour[count].valeur=1/(sf+8);
+					choix[can][sf]=1; 
 			}
 			/*Collision on ajoute juste la valeur*/
 			else{
-				gainTour[j].tour[count].valeur=0.1;
+				gainTour[j].tour[count].valeur=0;
 			}
 			/*Dans tout les cas on ajoute la combinaison du tour, on calcul
 			 * sa nouvelle moyenne et on augmente le nombre de fois qu'elle 
@@ -119,6 +122,13 @@ void init_moy(Tgain gainTour[NBEQUIP], int position[NBEQUIP]) {
 
 /*Calcul de la combinaison a choisir utilisation de la formule donnée dans 
  * le sujet.*/
+void alea_can_sf(int *ptCan,int *ptSf, int j) {
+	
+	*ptCan=rand()%2;
+	*ptSf=rand()%(NBSF-j)+j;
+	
+}
+
 void calc_best_can_sf(int *ptCan,int *ptSf, Tgain gain, int count) {
 	float tmp;
 	float result=0;
