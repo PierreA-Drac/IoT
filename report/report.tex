@@ -211,8 +211,8 @@ La formule utilisée et certaines contraintes nécessite de conserver plusieurs 
     \item[La moyenne de la machine] Il faut conserver tous les 
     choix de chaque machine à chaque tour. Pour ce faire nous avons décidé
     de créer une structure "tour" qui est composée du canal et du facteur 
-    d'étalement choisit ainsi que de la valeur (s'il y a eu collision 0,1
-    0,9 sinon).
+    d'étalement choisit ainsi que de la valeur (s'il y a eu collision 0 et 
+	un valeur inversement proportinel au SF sinon).
     La moyenne est calculée pour toutes les combinaisons mais une seule est 
     choisie à chaque tour donc il ne faudra recalculer qu'une seule valeur
     c'est pour cela que nous avons décidé que chaque machine posséderais 
@@ -235,10 +235,14 @@ nous en avons trouvé trois :
 \begin{itemize}
 	\item Une pour initialiser à une valeur précise certains tableaux.
 	\item Une autre pour calculer la moyenne.
-	\item Et enfin une dernière pour calculer quelle combinaison serait la
+	\item Une pour calculer quelle combinaison serait la
 	plus efficace pour la machine donnée. Cette fonction choisit la combinaison
 	dont l'envoie du paquet à le plus de chance de réussir. Si deux ou 
 	plus on la même chance alors on en prend une au hasard.
+	\item Et enfin une dernière qui choisit aléatoirement une combinaison.
+	Cette fonction nous permettra de faire une comparaison avec la fonction 
+	précedente et ainsi voir si nous avons pu améliorer le nombre de paquet
+	envoyé.
 \end{itemize}
 \subsection{Initialisation}
 \label{sub.exp.struct}
@@ -256,12 +260,36 @@ avons utilisé le hasard.
 
 \section{Résultat}
 \label{sec.res}
- TO DO
+Une fois le programme implémenté il a fallu le tester et voir si les résultats
+nous semblaient corrects. Pour cela nous avons décidé de ne faire varier 
+que le nombre d'équipements de 5 à 10 et de garder constant le nombre de tours 
+sachant que le nombre de combinaisons possible est 6.
+Pour chaque nombre d'équipements nous avons exécuté le programme 20 fois afin 
+d'avoir une moyenne et non pas une valeur unique pour que notre résultat soit
+le plus fiable possible.
+\newline
+Afin de pouvoir mieux observer la différence entre les deux méthodes nous 
+avons décidé d'utiliser un graphique.
+\newline Dans les deux cas, plus le nombre 
+d'équipements augmente plus le nombre de paquets envoyés diminue. Cela nous 
+semble cohérent puisque une fois que les six combinaisons ont été choisit 
+plus aucun paquet ne peut passer cela pose moins de problèmes tant que le nombre
+d'équipements souhaitant envoyer un paquet est inférieur au nombre de 
+combinaison possible car les équipements ont toujours la possibilité de 
+choisir une combinaison non utilisée alors que quand le nombre d'équipement 
+est plus élevé que le nombre de combinaisons, les derniers équipements n'ont 
+presque aucune chance d'avoir encore une combinaison de disponible.
+\newline On remarque cependant qu'en utilisant la méthode bandit manchot 
+quand le nombre de combinaisons est inférieur au nombre d'équipements alors 
+cette méthode est bien plus efficace et entraine bien moins de collision. Le 
+programme sait quelle combinaison choisir pour réduire le nombre de colisions.
 
 
-\section{Conclusion}
-\label{sec.conc}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=1]{figures/graphe.png}
+\end{figure}
 
-TO DO
+
 
 \end{document}
